@@ -1732,3 +1732,215 @@ window.Tripzy = {
   }
 
 };
+
+
+/* === TRIPZY DEMO DATA === */
+
+const tripzyData = {
+    cities: [
+        'Bengaluru',
+        'Mumbai',
+        'Delhi',
+        'Hyderabad',
+        'Chennai',
+        'Kolkata',
+        'Pune',
+        'Ahmedabad',
+        'Jaipur',
+        'Goa',
+        'Kochi',
+        'Manali',
+        'Shimla',
+        'Agra',
+        'Varanasi',
+        'Udaipur'
+    ],
+
+    languages: [
+        'English',
+        'Hindi',
+        'Kannada',
+        'Tamil',
+        'Telugu',
+        'Malayalam',
+        'Marathi',
+        'Bengali',
+        'Gujarati',
+        'Punjabi'
+    ],
+
+    guideSpecialties: [
+        'Food & street tours',
+        'Heritage walks',
+        'Nature & trekking',
+        'Photography tours',
+        'Shopping & markets',
+        'Nightlife',
+        'Adventure activities',
+        'Temple & culture tours'
+    ],
+
+    transportTypes: [
+        {
+            id: 'flights',
+            label: 'Flights',
+            icon: ''
+        },
+        {
+            id: 'trains',
+            label: 'Trains',
+            icon: ''
+        },
+        {
+            id: 'buses',
+            label: 'Buses',
+            icon: ''
+        },
+        {
+            id: 'taxis',
+            label: 'Taxis',
+            icon: ''
+        }
+    ],
+
+    travelClasses: [
+        {
+            id: 'economy',
+            label: 'Economy'
+        },
+        {
+            id: 'business',
+            label: 'Business'
+        },
+        {
+            id: 'first',
+            label: 'First Class'
+        }
+    ],
+
+    destinations: [
+        {
+            name: 'Agra',
+            state: 'Uttar Pradesh',
+            image: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=900',
+            description: 'Home to the Taj Mahal, Agra Fort and rich Mughal heritage.'
+        },
+        {
+            name: 'Kashmir',
+            state: 'Jammu & Kashmir',
+            image: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=900',
+            description: 'Snow-covered mountains, Dal Lake, houseboats and scenic valleys.'
+        },
+        {
+            name: 'Goa',
+            state: 'Goa',
+            image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=900',
+            description: 'Beaches, Portuguese heritage, seafood and relaxed coastal life.'
+        },
+        {
+            name: 'Kerala',
+            state: 'Kerala',
+            image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=900',
+            description: 'Backwaters, tea hills, Ayurveda, wildlife and peaceful houseboat stays.'
+        }
+    ],
+
+    guides: [
+        {
+            id: 'guide-1',
+            name: 'Aarav Mehta',
+            city: 'Jaipur',
+            language: 'Hindi',
+            specialty: 'Heritage walks',
+            rating: 4.9,
+            reviews: 128,
+            price: 1800,
+            image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600',
+            description: 'Explore Jaipur’s forts, bazaars and royal history with a local storyteller.'
+        },
+        {
+            id: 'guide-2',
+            name: 'Meera Nair',
+            city: 'Kochi',
+            language: 'Malayalam',
+            specialty: 'Food & street tours',
+            rating: 4.8,
+            reviews: 96,
+            price: 1500,
+            image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600',
+            description: 'Taste Kerala’s local flavours, spice markets and traditional seafood dishes.'
+        },
+        {
+            id: 'guide-3',
+            name: 'Rohan Sharma',
+            city: 'Manali',
+            language: 'Hindi',
+            specialty: 'Nature & trekking',
+            rating: 4.7,
+            reviews: 74,
+            price: 2200,
+            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600',
+            description: 'Trek through Himalayan trails, waterfalls and quiet mountain villages.'
+        },
+        {
+            id: 'guide-4',
+            name: 'Priya Iyer',
+            city: 'Chennai',
+            language: 'Tamil',
+            specialty: 'Temple & culture tours',
+            rating: 4.9,
+            reviews: 152,
+            price: 1600,
+            image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600',
+            description: 'Discover Chennai’s temples, classical arts, beaches and local culture.'
+        },
+        {
+            id: 'guide-5',
+            name: 'Kabir Khan',
+            city: 'Delhi',
+            language: 'English',
+            specialty: 'Food & street tours',
+            rating: 4.8,
+            reviews: 211,
+            price: 1400,
+            image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600',
+            description: 'Walk through Old Delhi’s food streets, historic lanes and hidden food spots.'
+        },
+        {
+            id: 'guide-6',
+            name: 'Ananya Rao',
+            city: 'Bengaluru',
+            language: 'Kannada',
+            specialty: 'Shopping & markets',
+            rating: 4.6,
+            reviews: 63,
+            price: 1300,
+            image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600',
+            description: 'Find handmade crafts, local cafés, markets and Bengaluru’s creative side.'
+        },
+        {
+            id: 'guide-7',
+            name: 'Vikram Desai',
+            city: 'Mumbai',
+            language: 'Marathi',
+            specialty: 'Photography tours',
+            rating: 4.7,
+            reviews: 88,
+            price: 1900,
+            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600',
+            description: 'Capture Mumbai’s colonial architecture, sea views, markets and street life.'
+        },
+        {
+            id: 'guide-8',
+            name: 'Sneha Patel',
+            city: 'Udaipur',
+            language: 'Gujarati',
+            specialty: 'Heritage walks',
+            rating: 4.9,
+            reviews: 117,
+            price: 1700,
+            image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600',
+            description: 'Visit lakes, palaces, rooftop cafés and the romantic old city of Udaipur.'
+        }
+    ]
+};
