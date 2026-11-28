@@ -214,7 +214,7 @@ if os.getenv("RENDER") == "true" and not DEMO_PASSWORD:
 
 @app.middleware("http")
 async def protect_demo(request: Request, call_next):
-    if DEMO_PASSWORD and request.url.path != "/api/health":
+    if DEMO_PASSWORD and request.url.path in ("/chatbot.html", "/api/chat", "/docs", "/redoc", "/openapi.json"):
         expected = base64.b64encode(
             f"judge:{DEMO_PASSWORD}".encode()
         ).decode()
