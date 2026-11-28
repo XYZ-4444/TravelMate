@@ -24,8 +24,7 @@ if not os.getenv("TAVILY_API_KEY"):
 
 # Initialize Google Gemini
 model = ChatGoogleGenerativeAI(
-    model="gemini-3.6-flash",
-    temperature=0.3,
+    model="gemini-3.5-flash-lite",
     timeout=60,
     max_retries=1
 )
@@ -173,18 +172,18 @@ def homepage():
 @app.get("/{page}.html")
 def website_page(page: str):
     allowed_pages = {
-        "index",
-        "chatbot",
-        "explore",
-        "hotels",
-        "guides",
-        "about",
-        "contact",
-        "trip-planner",
-        "guide-profile",
-        "travle",
-        "404"
-    }
+    "index",
+    "chatbot",
+    "explore",
+    "hotels",
+    "guides",
+    "about",
+    "contact",
+    "trip-planner",
+    "guide-profile",
+    "travle",
+    "404"
+}
 
     if page not in allowed_pages:
         raise HTTPException(status_code=404)
