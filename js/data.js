@@ -1943,4 +1943,6 @@ const tripzyData = {
             description: 'Visit lakes, palaces, rooftop cafés and the romantic old city of Udaipur.'
         }
     ]
-};
+
+
+  }

@@ -126,3 +126,271 @@ function savePlan(){const p=generatedPlan;if(!p)return;const text=`TRIPZY — YO
 /* === CURRENT PAGE INDICATOR === */
 const currentPage=location.pathname.split('/').pop()||'index.html';
 $$('.site-header a[href]').forEach(a=>{const target=a.getAttribute('href').split('?')[0];if(target===currentPage||(currentPage==='guide-profile.html'&&target==='guides.html'))a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+
+/* === TRAVEL PAGE SCRIPT === */
+
+const travelForm = document.getElementById('travelForm');
+const transportTabs = document.querySelectorAll('.transport-tab');
+const swapButton = document.getElementById('swapBtn');
+const fromInput = document.getElementById('from');
+const toInput = document.getElementById('to');
+const dateInput = document.getElementById('date');
+const passengersInput = document.getElementById('passengers');
+const travelClassInput = document.getElementById('travelClass');
+const passengerField = document.getElementById('passengerField');
+const classField = document.getElementById('classField');
+const resultsSection = document.getElementById('resultsSection');
+const resultsGrid = document.getElementById('results');
+const resultSummary = document.getElementById('resultSummary');
+const sortResults = document.getElementById('sortResults');
+const searchButton = document.getElementById('searchBtn');
+
+let selectedTransport = 'flights';
+let currentResults = [];
+
+const transportLabels = {
+    flights: 'Flights',
+    trains: 'Trains',
+    buses: 'Buses',
+    taxis: 'Taxis'
+};
+
+const demoOperators = {
+    flights: ['IndiGo', 'Air India', 'Akasa Air', 'SpiceJet'],
+    trains: ['Rajdhani Express', 'Shatabdi Express', 'Vande Bharat', 'Duronto Express'],
+    buses: ['VRL Travels', 'Orange Tours', 'RedBus Express', 'SRS Travels'],
+    taxis: ['Tripzy Cab', 'City Ride', 'Prime Cabs', 'Local Taxi']
+};
+
+const demoRoutes = {
+    flights: ['Direct flight', '1 stop', 'Direct flight', '1 stop'],
+    trains: ['AC Sleeper', 'AC 3 Tier', 'Executive Chair Car', 'Sleeper Class'],
+    buses: ['AC Sleeper', 'AC Seater', 'Volvo Multi-Axle', 'Non-AC Sleeper'],
+    taxis: ['Sedan', 'SUV', 'Hatchback', 'Tempo Traveller']
+};
+
+/* Set today as the minimum selectable journey date */
+function setMinimumDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    dateInput.min = `${year}-${month}-${day}`;
+}
+
+/* Show or hide fields that do not apply to every transport type */
+function updateTransportFields() {
+    const showPassengers = selectedTransport !== 'taxis';
+    const showClass = selectedTransport === 'flights' || selectedTransport === 'trains';
+
+    passengerField.hidden = !showPassengers;
+    classField.hidden = !showClass;
+}
+
+/* Switch between Flights, Trains, Buses and Taxis */
+function selectTransport(type) {
+    if (!transportLabels[type]) {
+        return;
+    }
+
+    selectedTransport = type;
+
+    transportTabs.forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.type === type);
+    });
+
+    updateTransportFields();
+}
+
+/* Create a realistic-looking demo result */
+function createResult(index) {
+    const operatorList = demoOperators[selectedTransport];
+    const routeList = demoRoutes[selectedTransport];
+    const operator = operatorList[index % operatorList.length];
+    const travelType = routeList[index % routeList.length];
+
+    const departureHour = 6 + index * 2;
+    const departureTime = `${String(departureHour).padStart(2, '0')}:30`;
+    const arrivalHour = departureHour + 2 + (index % 3);
+    const arrivalTime = `${String(arrivalHour % 24).padStart(2, '0')}:45`;
+
+    const durationHours = 2 + (index % 4);
+    const duration = `${durationHours}h ${10 + index * 5}m`;
+
+    const basePrice = selectedTransport === 'flights' ? 4200 : selectedTransport === 'trains' ? 1250 : selectedTransport === 'buses' ? 850 : 1800;
+    const passengerCount = Number(passengersInput.value) || 1;
+    const price = basePrice + index * 320;
+    const totalPrice = price * passengerCount;
+
+    return {
+        operator,
+        travelType,
+        departureTime,
+        arrivalTime,
+        duration,
+        price,
+        totalPrice,
+        passengerCount
+    };
+}
+
+/* Format currency for the demo prices */
+function formatPrice(value) {
+    return `₹${value.toLocaleString('en-IN')}`;
+}
+
+/* Render the search results */
+function renderResults() {
+    resultsGrid.innerHTML = '';
+
+    if (currentResults.length === 0) {
+        resultsGrid.innerHTML = `
+            <div class="result-card">
+                <div>
+                    <h3>No journeys found</h3>
+                    <p>Try a different route, date or transport type.</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    currentResults.forEach(result => {
+        const resultCard = document.createElement('article');
+        resultCard.className = 'result-card';
+
+        resultCard.innerHTML = `
+            <div>
+                <h3>${result.operator}</h3>
+                <p>${fromInput.value.trim()} → ${toInput.value.trim()}</p>
+                <span class="demo-label">Demo result</span>
+            </div>
+
+            <div>
+                <p><strong>${result.departureTime}</strong> — ${result.arrivalTime}</p>
+                <p>${result.duration}</p>
+            </div>
+
+            <div>
+                <p>${result.travelType}</p>
+                <p>${result.passengerCount} passenger${result.passengerCount > 1 ? 's' : ''}</p>
+            </div>
+
+            <div>
+                <div class="result-price">
+                    ${formatPrice(result.totalPrice)}
+                    <small>Total for ${result.passengerCount} passenger${result.passengerCount > 1 ? 's' : ''}</small>
+                </div>
+                <button class="book-btn" type="button">Book now</button>
+            </div>
+        `;
+
+        resultsGrid.appendChild(resultCard);
+    });
+}
+
+/* Sort results by price, duration or departure time */
+function sortCurrentResults() {
+    const sortType = sortResults.value;
+
+    currentResults.sort((first, second) => {
+        if (sortType === 'price') {
+            return first.totalPrice - second.totalPrice;
+        }
+
+        if (sortType === 'duration') {
+            return first.duration.localeCompare(second.duration);
+        }
+
+        return first.departureTime.localeCompare(second.departureTime);
+    });
+
+    renderResults();
+}
+
+/* Handle the search form submission */
+function handleSearch(event) {
+    event.preventDefault();
+
+    const from = fromInput.value.trim();
+    const to = toInput.value.trim();
+    const journeyDate = dateInput.value;
+
+    if (!from || !to || !journeyDate) {
+        alert('Please enter a departure city, destination city and journey date.');
+        return;
+    }
+
+    if (from.toLowerCase() === to.toLowerCase()) {
+        alert('Departure and destination cities cannot be the same.');
+        return;
+    }
+
+    searchButton.disabled = true;
+    searchButton.textContent = 'Searching...';
+
+    setTimeout(() => {
+        currentResults = Array.from({
+            length: 4
+        }, (_, index) => createResult(index));
+
+        resultSummary.textContent = `${transportLabels[selectedTransport]} from ${from} to ${to} on ${journeyDate}.`;
+
+        resultsSection.hidden = false;
+        sortCurrentResults();
+
+        searchButton.disabled = false;
+        searchButton.innerHTML = 'Search journeys <span>→</span>';
+
+        resultsSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }, 700);
+}
+
+/* Swap the departure and destination values */
+function swapLocations() {
+    const fromValue = fromInput.value;
+    fromInput.value = toInput.value;
+    toInput.value = fromValue;
+}
+
+/* Connect the transport cards to the booking tabs */
+function connectTransportCards() {
+    document.querySelectorAll('[data-select]').forEach(button => {
+        button.addEventListener('click', () => {
+            selectTransport(button.dataset.select);
+
+            document.getElementById('booking').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    });
+}
+
+/* Start the travel page */
+function initTravelPage() {
+    setMinimumDate();
+    updateTransportFields();
+    connectTransportCards();
+
+    transportTabs.forEach(tab => {
+        tab.addEventListener('click', () => selectTransport(tab.dataset.type));
+    });
+
+    swapButton.addEventListener('click', swapLocations);
+
+    travelForm.addEventListener('submit', handleSearch);
+
+    sortResults.addEventListener('change', sortCurrentResults);
+}
+
+document.addEventListener('DOMContentLoaded', initTravelPage);
+
+const guides = window.tripzyData.guides;
+const cities = window.tripzyData.cities;
+const languages = window.tripzyData.languages;
+const specialties = window.tripzyData.guideSpecialties;
