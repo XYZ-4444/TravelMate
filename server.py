@@ -188,7 +188,7 @@ def website_page(page: str):
     if page not in allowed_pages:
         raise HTTPException(status_code=404)
 
-    file = BASE_DIR / f"{page}.html"
+    file = BASE_DIR / "html" / f"{page}.html"
 
     if not file.is_file():
         raise HTTPException(status_code=404)
