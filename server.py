@@ -196,7 +196,7 @@ def website_page(page: str):
 
     return FileResponse(file)
 
-app = FastAPI(title="TravelMate AI")
+
 
 import base64
 import secrets
