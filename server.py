@@ -165,7 +165,7 @@ for folder in ("css", "js", "assets"):
 # Serve homepage
 @app.get("/")
 def homepage():
-    return FileResponse(BASE_DIR / "index.html")
+    return FileResponse(BASE_DIR / "html" / "index.html")
 
 
 # Serve all website pages
