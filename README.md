@@ -15,14 +15,6 @@ Tripzy integrates TravelMate AI, an intelligent conversational travel assistant 
 - **Backend Health:** https://tripzy-travelmate.onrender.com/api/health
 - **API Documentation:** https://tripzy-travelmate.onrender.com/docs
 
----
-
-## 🏆 Smart India Hackathon — Problem Statement
-
-**Student Innovation**
-
-A solution or idea that can boost the current situation of the tourism industries, including hotels, travel and other related services.
-
 ### Our Solution
 
 Tripzy brings travel-related services into a single intelligent platform, helping travellers discover destinations, explore accommodation, find local guides and create personalized, budget-aware travel plans.
