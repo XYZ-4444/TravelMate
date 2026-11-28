@@ -196,4 +196,53 @@ def website_page(page: str):
 
     return FileResponse(file)
 
- 
+app = FastAPI(title="TravelMate AI")
+
+import base64
+import secrets
+from collections import deque
+from time import monotonic
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+DEMO_PASSWORD = os.getenv("DEMO_PASSWORD", "")
+recent_requests = deque()
+
+if os.getenv("RENDER") == "true" and not DEMO_PASSWORD:
+    raise RuntimeError("DEMO_PASSWORD is missing")
+
+
+@app.middleware("http")
+async def protect_demo(request: Request, call_next):
+    if DEMO_PASSWORD and request.url.path != "/api/health":
+        expected = base64.b64encode(
+            f"judge:{DEMO_PASSWORD}".encode()
+        ).decode()
+
+        supplied = request.headers.get("Authorization", "")
+
+        if not secrets.compare_digest(
+            supplied.encode(),
+            f"Basic {expected}".encode()
+        ):
+            return JSONResponse(
+                {"detail": "Login required"},
+                status_code=401,
+                headers={"WWW-Authenticate": 'Basic realm="Tripzy"'}
+            )
+
+        if request.url.path == "/api/chat":
+            now = monotonic()
+
+            while recent_requests and now - recent_requests[0] >= 60:
+                recent_requests.popleft()
+
+            if len(recent_requests) >= 6:
+                return JSONResponse(
+                    {"detail": "Please try again shortly"},
+                    status_code=429
+                )
+
+            recent_requests.append(now)
+
+    return await call_next(request)
